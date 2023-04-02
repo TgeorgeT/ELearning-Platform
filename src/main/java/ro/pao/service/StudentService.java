@@ -2,6 +2,7 @@ package ro.pao.service;
 
 import ro.pao.model.Course;
 import ro.pao.model.ExampleClass;
+import ro.pao.model.Name;
 import ro.pao.model.Student;
 import ro.pao.model.enums.CourseName;
 
@@ -35,5 +36,5 @@ public interface StudentService {
 
     void modifyElementById(UUID id, Student student);
 
-    List<Student> getAllByName(String name);
+    List<Student> getAllByName(Name name);
 }

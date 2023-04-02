@@ -10,7 +10,7 @@ import ro.pao.model.abstracts.User;
 @NoArgsConstructor
 @SuperBuilder
 public class Student extends User {
-    String name;
+    Name name;
     ReportCard reportCard;
 
 

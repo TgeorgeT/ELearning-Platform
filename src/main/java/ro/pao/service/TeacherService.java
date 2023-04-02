@@ -1,9 +1,6 @@
 package ro.pao.service;
 
-import ro.pao.model.Course;
-import ro.pao.model.ExampleClass;
-import ro.pao.model.Student;
-import ro.pao.model.Teacher;
+import ro.pao.model.*;
 import ro.pao.model.enums.CourseName;
 
 import java.util.List;
@@ -24,5 +21,5 @@ public interface TeacherService {
 
     void modifyElementById(UUID id, Teacher teacher);
 
-    List<Teacher> getAllByName(String name);
+    List<Teacher> getAllByName(Name name);
 }

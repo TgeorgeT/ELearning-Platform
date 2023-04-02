@@ -7,6 +7,7 @@ import ro.pao.service.*;
 import ro.pao.service.impl.*;
 
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.*;
 
 /**
@@ -24,6 +25,7 @@ public class Menu {
     private final CourseService courseService = new CourseServiceImpl();
     private final StudentService studentService = new StudentServiceImpl();
     private final QuestionService questionService = new QuestionServiceImpl();
+    private final TeacherService teacherService = new TeacherServiceImpl();
 
 
 
@@ -41,21 +43,23 @@ public class Menu {
         ReportCard card1 = ReportCard.builder().grades(new HashMap<>()).build();
         reportCardService.addOnlyOne(card1);
 
-        Course poo = Course.builder().id(UUID.randomUUID()).name(CourseName.OOP).build();
+        Teacher teacher1 = Teacher.builder().id(UUID.randomUUID()).name(new Name("Popescu", "Dan")).passwdHash(User.hashPasswd("1234")).build();
+        teacherService.addOnlyOne(teacher1);
+
+        Course poo = Course.builder().id(UUID.randomUUID()).students(new HashSet<>()).quizes(new ArrayList<>()).year(Year.now()).name(CourseName.OOP).build();
 
         courseService.addOnlyOne(poo);
 
         reportCardService.addGrade(card1.getId(), 4.3, poo);
 
 
-        Student student1 = Student.builder().id(UUID.randomUUID()).name("George").userName("george")
+        Student student1 = Student.builder().id(UUID.randomUUID()).name(new Name("Teodorescu", "George")).userName("george")
                 .passwdHash(User.hashPasswd("12345")).reportCard(card1).build();
         studentService.addOnlyOne(student1);
 
-        Student student2 = Student.builder().id(UUID.randomUUID()).name("Andrei").userName("andrei")
+        Student student2 = Student.builder().id(UUID.randomUUID()).name(new Name("Ionescu", "Andrei")).userName("andrei")
                 .passwdHash(User.hashPasswd("12345")).reportCard(card1).build();
         studentService.addOnlyOne(student2);
-
 
         System.out.println(reportCardService.getById(card1.getId()).get().getGrades().get(poo.getId()));
 
@@ -66,13 +70,12 @@ public class Menu {
         questionService.addOption(q1.getId(),"asdfds");
         questionService.addOption(q1.getId(), "asd");
 
-        Question q2 = Question.builder().id(UUID.randomUUID()).text("q2").answer(0).build();
+        Question q2 = Question.builder().id(UUID.randomUUID()).text("q2").options(new ArrayList<>()).answer(0).build();
 
-        questionService.addOnlyOne(q1);
-        questionService.addOption(q1.getId(),"dasfds");
-        questionService.addOption(q1.getId(),"asdfds");
-        questionService.addOption(q1.getId(), "asd");
-
+        questionService.addOnlyOne(q2);
+        questionService.addOption(q2.getId(),"dasfds");
+        questionService.addOption(q2.getId(),"asdfds");
+        questionService.addOption(q2.getId(), "asd");
 
 
 
@@ -120,14 +123,26 @@ public class Menu {
 
     public void getAllStudents() {
         String intro = """
-                Welcome to the platform
+                A list of students
                 """;
 
         System.out.println(intro);
 
         studentService.getAllFromMap().stream().sorted(Comparator.comparing(Student::getName)).forEach(student ->
                 System.out.println(student));
+    }
+
+    public void getAllCourses(){
+        String intro = """
+                 A list of courses
+                 """;
+
+        System.out.println(intro);
+
+        courseService.getAllFromMap().stream().forEach(c -> System.out.println(c));
 
     }
+
+
 
 }

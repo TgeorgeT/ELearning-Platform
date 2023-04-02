@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.mindrot.jbcrypt.BCrypt;
 import ro.pao.model.abstracts.AbstractEntity;
+import ro.pao.model.abstracts.User;
 
 @Getter
 @Setter
@@ -12,6 +13,6 @@ import ro.pao.model.abstracts.AbstractEntity;
 @NoArgsConstructor
 @SuperBuilder
 
-public class Teacher extends AbstractEntity {
-    String name;
+public class Teacher extends User {
+    Name name;
 }

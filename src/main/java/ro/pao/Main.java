@@ -14,6 +14,7 @@ public class Main {
 
             menu.intro();
             menu.getAllStudents();
+            menu.getAllCourses();
             if ("exit".equals(scanner.next())) {
                 break;
             }

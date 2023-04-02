@@ -3,6 +3,7 @@ package ro.pao.service.impl;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ro.pao.model.Course;
+import ro.pao.model.Name;
 import ro.pao.model.Student;
 import ro.pao.model.enums.CourseName;
 import ro.pao.service.CourseService;
@@ -51,7 +52,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> getAllByName(String name) {
+    public List<Student> getAllByName(Name name) {
         return students.values().stream().filter(c -> c.getName().equals(name)).collect(Collectors.toList());
     }
 }
