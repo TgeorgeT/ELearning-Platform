@@ -19,5 +19,5 @@ AbstractEntity
 CourseName
 
 
-Crud options for all classes
+CRUD options for all classes
 Sorting Students by name
