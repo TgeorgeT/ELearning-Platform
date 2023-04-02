@@ -18,7 +18,9 @@ AbstractEntity
 ### Enums:
 CourseName
 
+### Record:
+Name
+
 
 CRUD options for all classes
-
 Sorting Students by name
