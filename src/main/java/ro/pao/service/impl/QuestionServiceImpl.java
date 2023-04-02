@@ -13,6 +13,7 @@ import ro.pao.service.StudentService;
 import ro.pao.service.TeacherService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -29,7 +30,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<Question> getAllFromMap() {
-        return questions.values().stream().toList();
+        return questions.values().stream().collect(Collectors.toList());
     }
 
     @Override
@@ -39,7 +40,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void addAllFromGivenList(List<Question> questions) {
-        questions.stream().map(c -> this.questions.put(c.getId(), c));
+        questions.stream().forEach(c -> this.questions.put(c.getId(), c));
     }
 
     @Override

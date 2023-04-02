@@ -13,7 +13,7 @@ public class Main {
             Menu menu = Menu.getInstance();
 
             menu.intro();
-
+            menu.getAllStudents();
             if ("exit".equals(scanner.next())) {
                 break;
             }

@@ -7,10 +7,7 @@ import ro.pao.service.*;
 import ro.pao.service.impl.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * In Meniu se fac operatiile care pot lua informatii din toate dintre servicile definite.
@@ -36,7 +33,7 @@ public class Menu {
 
     public void intro() {
         String intro = """
-                Intro example
+                Welcome to the platform
                 """;
 
         System.out.println(intro);
@@ -55,9 +52,14 @@ public class Menu {
                 .passwdHash(User.hashPasswd("12345")).reportCard(card1).build();
         studentService.addOnlyOne(student1);
 
+        Student student2 = Student.builder().id(UUID.randomUUID()).name("Andrei").userName("andrei")
+                .passwdHash(User.hashPasswd("12345")).reportCard(card1).build();
+        studentService.addOnlyOne(student2);
+
+
         System.out.println(reportCardService.getById(card1.getId()).get().getGrades().get(poo.getId()));
 
-        Question q1 = Question.builder().id(UUID.randomUUID()).text("q1").answer(1).build();
+        Question q1 = Question.builder().id(UUID.randomUUID()).text("q1").options(new ArrayList<>()).answer(1).build();
 
         questionService.addOnlyOne(q1);
         questionService.addOption(q1.getId(),"dasfds");
@@ -115,4 +117,17 @@ public class Menu {
 //        exampleService.getAllFromList()
 //                .forEach(elementFromList -> System.out.println(elementFromList));
     }
+
+    public void getAllStudents() {
+        String intro = """
+                Welcome to the platform
+                """;
+
+        System.out.println(intro);
+
+        studentService.getAllFromMap().stream().sorted(Comparator.comparing(Student::getName)).forEach(student ->
+                System.out.println(student));
+
+    }
+
 }

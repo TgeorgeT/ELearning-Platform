@@ -8,6 +8,7 @@ import ro.pao.service.AnsweredQuizService;
 import ro.pao.service.ReportCardService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -24,7 +25,7 @@ public class AnsweredQuizServiceImpl implements AnsweredQuizService {
 
     @Override
     public List<AnsweredQuiz> getAllFromMap() {
-        return aQuizzes.values().stream().toList();
+        return aQuizzes.values().stream().collect(Collectors.toList());
     }
 
     @Override
@@ -34,7 +35,7 @@ public class AnsweredQuizServiceImpl implements AnsweredQuizService {
 
     @Override
     public void addAllFromGivenList(List<AnsweredQuiz> aQuizzes) {
-        aQuizzes.stream().map(c -> this.aQuizzes.put(c.getId(), c));
+        aQuizzes.stream().forEach(c -> this.aQuizzes.put(c.getId(), c));
     }
 
     @Override
@@ -51,7 +52,7 @@ public class AnsweredQuizServiceImpl implements AnsweredQuizService {
     @Override
     public void grade(UUID id) {
         AnsweredQuiz aQuizz = aQuizzes.get(id);
-        List<Integer> correctAnswers = aQuizz.getQuiz().getQuestionList().stream().map(question -> question.getAnswer()).toList();
+        List<Integer> correctAnswers = aQuizz.getQuiz().getQuestionList().stream().map(question -> question.getAnswer()).collect(Collectors.toList());
         Double grade = 0.0;
         for (Integer i = 0; i < correctAnswers.size(); i++) {
             if (aQuizz.getAnswers().get(i) == correctAnswers.get(i)) {

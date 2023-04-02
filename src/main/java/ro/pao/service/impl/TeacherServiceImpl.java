@@ -11,6 +11,7 @@ import ro.pao.service.StudentService;
 import ro.pao.service.TeacherService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -27,7 +28,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public List<Teacher> getAllFromMap() {
-        return teachers.values().stream().toList();
+        return teachers.values().stream().collect(Collectors.toList());
     }
 
     @Override
@@ -37,7 +38,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void addAllFromGivenList(List<Teacher> teachers) {
-        teachers.stream().map(c -> this.teachers.put(c.getId(), c));
+        teachers.stream().forEach(c -> this.teachers.put(c.getId(), c));
     }
 
     @Override
@@ -53,6 +54,6 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public List<Teacher> getAllByName(String name) {
-        return teachers.values().stream().filter(c -> c.getName().equals(name)).toList();
+        return teachers.values().stream().filter(c -> c.getName().equals(name)).collect(Collectors.toList());
     }
 }

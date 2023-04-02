@@ -9,6 +9,7 @@ import ro.pao.service.CourseService;
 import ro.pao.service.StudentService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -25,7 +26,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getAllFromMap() {
-        return students.values().stream().toList();
+        return students.values().stream().collect(Collectors.toList());
     }
 
     @Override
@@ -35,7 +36,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void addAllFromGivenList(List<Student> students) {
-        students.stream().map(c -> this.students.put(c.getId(), c));
+        students.stream().forEach(c -> this.students.put(c.getId(), c));
     }
 
     @Override
@@ -51,6 +52,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getAllByName(String name) {
-        return students.values().stream().filter(c -> c.getName().equals(name)).toList();
+        return students.values().stream().filter(c -> c.getName().equals(name)).collect(Collectors.toList());
     }
 }

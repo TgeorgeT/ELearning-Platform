@@ -7,6 +7,8 @@ import ro.pao.model.enums.CourseName;
 import ro.pao.service.CourseService;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 @NoArgsConstructor
 @Getter
 public class CourseServiceImpl implements CourseService {
@@ -22,7 +24,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> getAllFromMap() {
-        return courses.values().stream().toList();
+        return courses.values().stream().collect(Collectors.toList());
     }
 
     @Override
@@ -32,7 +34,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void addAllFromGivenList(List<Course> courses) {
-        courses.stream().map(c -> this.courses.put(c.getId(), c));
+        courses.stream().forEach(c -> this.courses.put(c.getId(), c));
     }
     @Override
     public void removeElementById(UUID id){
@@ -47,6 +49,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> getAllByName(CourseName name) {
-        return courses.values().stream().filter(c -> c.getName().equals(name)).toList();
+        return courses.values().stream().filter(c -> c.getName().equals(name)).collect(Collectors.toList());
     }
 }

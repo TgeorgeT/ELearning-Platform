@@ -11,6 +11,7 @@ import ro.pao.service.QuizService;
 import ro.pao.service.StudentService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -27,7 +28,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public List<Quiz> getAllFromMap() {
-        return quizzes.values().stream().toList();
+        return quizzes.values().stream().collect(Collectors.toList());
     }
 
     @Override
@@ -37,7 +38,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public void addAllFromGivenList(List<Quiz> quizzes) {
-        quizzes.stream().map(c -> this.quizzes.put(c.getId(), c));
+        quizzes.stream().forEach(c -> this.quizzes.put(c.getId(), c));
     }
 
     @Override

@@ -8,6 +8,7 @@ import ro.pao.model.ReportCard;
 import ro.pao.service.ReportCardService;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -24,7 +25,7 @@ public class ReportCardServiceImpl implements ReportCardService {
 
     @Override
     public List<ReportCard> getAllFromMap() {
-        return reportCards.values().stream().toList();
+        return reportCards.values().stream().collect(Collectors.toList());
     }
 
     @Override
@@ -34,7 +35,7 @@ public class ReportCardServiceImpl implements ReportCardService {
 
     @Override
     public void addAllFromGivenList(List<ReportCard> reportCards) {
-        reportCards.stream().map(c -> this.reportCards.put(c.getId(), c));
+        reportCards.stream().forEach(c -> this.reportCards.put(c.getId(), c));
     }
 
     @Override
