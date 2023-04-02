@@ -3,12 +3,19 @@
 
 ### Classes:
 Student
+
 Teacher
+
 Quiz
+
 Question
+
 AnsweredQuiz
+
 Course
+
 ReportCard
+
 
 
 ### Abstract classes:
