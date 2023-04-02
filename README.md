@@ -20,6 +20,7 @@ ReportCard
 
 ### Abstract classes:
 User
+
 AbstractEntity
 
 ### Enums:
