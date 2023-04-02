@@ -20,7 +20,6 @@ public class Question extends AbstractEntity {
     private ArrayList<String> options = new ArrayList<>();
     private Integer answer;
     private Double points;
-    UUID quizId;
 
 
 }

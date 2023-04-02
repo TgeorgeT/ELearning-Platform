@@ -21,4 +21,6 @@ public interface QuizService {
 
     void modifyElementById(UUID id, Quiz quiz);
 
+    void addQuestion(UUID id, Question q);
+
 }

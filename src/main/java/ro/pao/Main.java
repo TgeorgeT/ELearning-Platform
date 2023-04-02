@@ -15,6 +15,8 @@ public class Main {
             menu.intro();
             menu.getAllStudents();
             menu.getAllCourses();
+            menu.addQuiz();
+            menu.gradeQuiz();
             if ("exit".equals(scanner.next())) {
                 break;
             }

@@ -26,8 +26,8 @@ public class Menu {
     private final StudentService studentService = new StudentServiceImpl();
     private final QuestionService questionService = new QuestionServiceImpl();
     private final TeacherService teacherService = new TeacherServiceImpl();
-
-
+    private final QuizService quizService = new QuizServiceImpl();
+    private final AnsweredQuizService answeredQuizService = new AnsweredQuizServiceImpl();
 
     public static Menu getInstance() {
         return (INSTANCE == null ? new Menu() : INSTANCE);
@@ -63,14 +63,14 @@ public class Menu {
 
         System.out.println(reportCardService.getById(card1.getId()).get().getGrades().get(poo.getId()));
 
-        Question q1 = Question.builder().id(UUID.randomUUID()).text("q1").options(new ArrayList<>()).answer(1).build();
+        Question q1 = Question.builder().id(UUID.randomUUID()).text("q1").options(new ArrayList<>()).answer(1).points(5.0).build();
 
         questionService.addOnlyOne(q1);
         questionService.addOption(q1.getId(),"dasfds");
         questionService.addOption(q1.getId(),"asdfds");
         questionService.addOption(q1.getId(), "asd");
 
-        Question q2 = Question.builder().id(UUID.randomUUID()).text("q2").options(new ArrayList<>()).answer(0).build();
+        Question q2 = Question.builder().id(UUID.randomUUID()).text("q2").options(new ArrayList<>()).points(5.0).answer(2).build();
 
         questionService.addOnlyOne(q2);
         questionService.addOption(q2.getId(),"dasfds");
@@ -143,6 +143,33 @@ public class Menu {
 
     }
 
+    public void addQuiz(){
+        String intro = """
+                Added a quiz
+                """;
+
+        Quiz quiz1 = Quiz.builder().id(UUID.randomUUID()).course(courseService.getAllFromMap().get(0)).questionList(new ArrayList<>()).build();
+        quizService.addOnlyOne(quiz1);
+
+        quizService.addQuestion(quiz1.getId(), questionService.getAllFromMap().get(0));
+        quizService.addQuestion(quiz1.getId(), questionService.getAllFromMap().get(1));
+
+        System.out.println(quizService.getAllFromMap().get(0));
+    }
+
+    public void gradeQuiz(){
+        List<Integer> answers = new ArrayList<>();
+        answers.add(1);
+        answers.add(2);
+        AnsweredQuiz answeredQuiz = AnsweredQuiz.builder().id(UUID.randomUUID()).quiz(quizService.getAllFromMap().get(0)).answers(answers)
+                .student(studentService.getAllFromMap().get(0)).build();
+
+        answeredQuizService.addOnlyOne(answeredQuiz);
+
+        answeredQuizService.grade(answeredQuiz.getId());
+        System.out.println(answeredQuiz);
+        System.out.println(reportCardService.getAllFromMap().get(0));
+    }
 
 
 }

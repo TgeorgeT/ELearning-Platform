@@ -3,6 +3,7 @@ package ro.pao.service.impl;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ro.pao.model.Course;
+import ro.pao.model.Question;
 import ro.pao.model.Quiz;
 import ro.pao.model.Student;
 import ro.pao.model.enums.CourseName;
@@ -52,4 +53,9 @@ public class QuizServiceImpl implements QuizService {
         addOnlyOne(quiz);
     }
 
+    @Override
+    public void addQuestion(UUID id, Question q) {
+        quizzes.get(id).getQuestionList().add(q);
+
+    }
 }
