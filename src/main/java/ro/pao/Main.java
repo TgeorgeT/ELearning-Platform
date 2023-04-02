@@ -17,6 +17,10 @@ public class Main {
             menu.getAllCourses();
             menu.addQuiz();
             menu.gradeQuiz();
+            menu.getAllTeachers();
+            menu.getAllQuizzes();
+            menu.removeQuiz();
+            menu.orderedQuizzes();
             if ("exit".equals(scanner.next())) {
                 break;
             }

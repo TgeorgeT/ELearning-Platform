@@ -148,8 +148,16 @@ public class Menu {
                 Added a quiz
                 """;
 
+        System.out.println(intro);
+
         Quiz quiz1 = Quiz.builder().id(UUID.randomUUID()).course(courseService.getAllFromMap().get(0)).questionList(new ArrayList<>()).build();
         quizService.addOnlyOne(quiz1);
+
+        Quiz quiz2 = Quiz.builder().id(UUID.randomUUID()).course(courseService.getAllFromMap().get(0)).questionList(new ArrayList<>()).build();
+        quizService.addOnlyOne(quiz2);
+
+        Quiz quiz3 = Quiz.builder().id(UUID.randomUUID()).course(courseService.getAllFromMap().get(0)).questionList(new ArrayList<>()).build();
+        quizService.addOnlyOne(quiz3);
 
         quizService.addQuestion(quiz1.getId(), questionService.getAllFromMap().get(0));
         quizService.addQuestion(quiz1.getId(), questionService.getAllFromMap().get(1));
@@ -158,6 +166,12 @@ public class Menu {
     }
 
     public void gradeQuiz(){
+
+        String intro = """
+                Grading a quiz
+                """;
+        System.out.println(intro);
+
         List<Integer> answers = new ArrayList<>();
         answers.add(1);
         answers.add(2);
@@ -169,6 +183,42 @@ public class Menu {
         answeredQuizService.grade(answeredQuiz.getId());
         System.out.println(answeredQuiz);
         System.out.println(reportCardService.getAllFromMap().get(0));
+    }
+
+
+    public void getAllTeachers(){
+        String intro = """
+                Printing all teachers
+                """;
+        System.out.println(intro);
+        teacherService.getAllFromMap().stream().forEach(c -> System.out.println(c));
+    }
+
+    public void getAllQuizzes(){
+        String intro = """
+                Printing all quizzes
+                """;
+        System.out.println(intro);
+        quizService.getAllFromMap().stream().forEach(c -> System.out.println(c));
+    }
+
+    public void removeQuiz(){
+        String intro = """
+                Removing a quiz
+                """;
+        System.out.println(intro);
+        quizService.removeElementById(quizService.getAllFromMap().get(0).getId());
+        quizService.getAllFromMap().stream().forEach(c -> System.out.println(c));
+    }
+
+    public void orderedQuizzes(){
+        String intro = """
+                Ordering quizzes
+                """;
+        System.out.println(intro);
+        quizService.getAllFromMap().stream().sorted(Comparator.comparing(quiz -> quiz.getQuestionList().size())).forEach(quiz ->
+                System.out.println(quiz));
+
     }
 
 
