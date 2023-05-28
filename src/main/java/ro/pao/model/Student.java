@@ -11,7 +11,7 @@ import ro.pao.model.abstracts.User;
 @SuperBuilder
 public class Student extends User {
     Name name;
-    ReportCard reportCard;
+
 
 
 }

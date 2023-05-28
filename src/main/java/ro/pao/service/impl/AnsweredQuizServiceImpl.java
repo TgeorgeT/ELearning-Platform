@@ -49,19 +49,19 @@ public class AnsweredQuizServiceImpl implements AnsweredQuizService {
         addOnlyOne(aQuizz);
     }
 
-    @Override
-    public void grade(UUID id) {
-        AnsweredQuiz aQuizz = aQuizzes.get(id);
-        List<Integer> correctAnswers = aQuizz.getQuiz().getQuestionList().stream().map(question -> question.getAnswer()).collect(Collectors.toList());
-        Double grade = 0.0;
-        for (Integer i = 0; i < correctAnswers.size(); i++) {
-            if (aQuizz.getAnswers().get(i) == correctAnswers.get(i)) {
-                grade += aQuizz.getQuiz().getQuestionList().get(i).getPoints();
-            }
-        }
-
-        ReportCardService reportCardService = new ReportCardServiceImpl();
-        reportCardService.addGrade(aQuizz.getStudent().getReportCard().getId(),grade, aQuizz.getQuiz().getCourse());
-
-    }
+    //@Override
+//    public void grade(UUID id) {
+//        AnsweredQuiz aQuizz = aQuizzes.get(id);
+//        List<Integer> correctAnswers = aQuizz.getQuiz().getQuestionList().stream().map(question -> question.getAnswer()).collect(Collectors.toList());
+//        Double grade = 0.0;
+//        for (Integer i = 0; i < correctAnswers.size(); i++) {
+//            if (aQuizz.getAnswers().get(i) == correctAnswers.get(i)) {
+//                grade += aQuizz.getQuiz().getQuestionList().get(i).getPoints();
+//            }
+//        }
+//
+//        ReportCardService reportCardService = new ReportCardServiceImpl();
+//        reportCardService.addGrade(aQuizz.getStudent().getReportCard().getId(),grade, aQuizz.getQuiz().getCourse());
+//
+//    }
 }

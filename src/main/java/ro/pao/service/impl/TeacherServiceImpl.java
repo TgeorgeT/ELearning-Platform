@@ -1,60 +1,149 @@
 package ro.pao.service.impl;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import ro.pao.model.Course;
-import ro.pao.model.Name;
-import ro.pao.model.Student;
+import lombok.RequiredArgsConstructor;
+//import ro.pao.application.csv.CsvReader;
+//import ro.pao.application.csv.CsvWriter;
 import ro.pao.model.Teacher;
-import ro.pao.model.enums.CourseName;
-import ro.pao.service.CourseService;
-import ro.pao.service.StudentService;
+import ro.pao.repository.TeacherRepository;
 import ro.pao.service.TeacherService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-@NoArgsConstructor
+/**
+ * Aici implementam metodele din interfata serviciului definit.
+ */
+@RequiredArgsConstructor
 @Getter
 public class TeacherServiceImpl implements TeacherService {
-    static private Map<UUID, Teacher> teachers = new HashMap<>();
+
+    private final TeacherRepository teacherRepository;
 
     @Override
     public Optional<Teacher> getById(UUID id) {
-        if (teachers.containsKey(id)) {
-            return Optional.of(teachers.get(id));
-        }
-        return Optional.ofNullable(null);
+        return teacherRepository.getObjectById(id);
+    }
+
+
+    @Override
+    public List<Teacher> getAll() {
+        return teacherRepository.getAll();
     }
 
     @Override
-    public List<Teacher> getAllFromMap() {
-        return teachers.values().stream().collect(Collectors.toList());
+    public List<Teacher> getAllWithCondition() {
+        return null;
+    }
+
+    @Override
+    public void addAllFromGivenList(List<Teacher> teacherList) {
+        teacherRepository.addAllFromGivenList(teacherList);
     }
 
     @Override
     public void addOnlyOne(Teacher teacher) {
-        teachers.put(teacher.getId(), teacher);
-    }
-
-    @Override
-    public void addAllFromGivenList(List<Teacher> teachers) {
-        teachers.stream().forEach(c -> this.teachers.put(c.getId(), c));
+        teacherRepository.addNewObject(teacher);
     }
 
     @Override
     public void removeElementById(UUID id) {
-        teachers.remove(id);
+        teacherRepository.deleteObjectById(id);
     }
 
     @Override
-    public void modifyElementById(UUID id, Teacher teacher) {
-        removeElementById(id);
-        addOnlyOne(teacher);
+    public void modificaElementById(UUID id, Teacher teacher) {
+        teacherRepository.updateObjectById(id, teacher);
     }
 
-    @Override
-    public List<Teacher> getAllByName(Name name) {
-        return teachers.values().stream().filter(c -> c.getName().equals(name)).collect(Collectors.toList());
-    }
+    /** Method example that reads employees from csv */
+    /*
+    This code will print the contents of the CSV file to the console in two different formats:
+    allLines: a list of arrays, where each array represents a row in the CSV file.
+    lineByLine: a list of arrays, where each array represents a single line in the CSV file.
+
+    The output will look something like this:
+
+    [id, first_name, last_name, email, gender, age]
+    [1, John, Doe, john.doe@example.com, Male, 35]
+    [2, Jane, Doe, jane.doe@example.com, Female, 30]
+    [3, Bob, Smith, bob.smith@example.com, Male, 45]
+
+    [1, John, Doe, john.doe@example.com, Male, 35]
+    [2, Jane, Doe, jane.doe@example.com, Female, 30]
+    [3, Bob, Smith, bob.smith@example.com, Male, 45]
+    This is just a simple example, but I hope it helps you understand how you can use this CsvReader implementation in your own projects.
+     */
+//    private void readFromCsv(List<ExampleClass> exampleClassList) throws Exception {
+//        try {
+//            CsvReader csvReader = CsvReader.getInstance();
+//
+//            // Read all lines at once
+//            List<String[]> allLines = csvReader.executeAllLines();
+//            for (String[] line : allLines) {
+//                System.out.println(Arrays.toString(line));
+//            }
+//
+//            // Read line by line
+//            List<String[]> lineByLine = csvReader.executeLineByLine();
+//            for (String[] line : lineByLine) {
+//                System.out.println(Arrays.toString(line));
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    /** Method example that writes employees to csv */
+//    private void writeToCsv(List<ExampleClass> exampleClassList) throws Exception {
+//        // Suppose you have a list of String[] arrays representing rows in a CSV file, like this:
+//        List<String[]> lines = new ArrayList<>();
+//        lines.add(new String[] {"id", "name", "age"});
+//        lines.add(new String[] {"1", "John Doe", "35"});
+//        lines.add(new String[] {"2", "Jane Doe", "30"});
+//        lines.add(new String[] {"3", "Bob Smith", "45"});
+//
+//        // To write this data to a CSV file using CsvWriter, you can write the following code:
+//
+//        try {
+//            CsvWriter csvWriter = CsvWriter.getInstance();
+//
+//            // Write line by line
+//            Path lineByLinePath = Paths.get("line_by_line.csv");
+//
+//            //String lineByLineContentsPathDefined = csvWriter.executeLineByLine(lines);
+//            String lineByLineContents = csvWriter.writeLineByLine(lines, lineByLinePath);
+//            System.out.println("Contents of line_by_line.csv:");
+//            System.out.println(lineByLineContents);
+//
+//
+//
+//            // Write all lines at once
+//            Path allLinesPath = Paths.get("all_lines.csv");
+//            //String allLinesContents = csvWriter.executeAllLines(lines);
+//            String allLinesContents = csvWriter.writeAllLines(lines, allLinesPath);
+//            System.out.println("Contents of all_lines.csv:");
+//            System.out.println(allLinesContents);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        /*
+//        This code will write the contents of the lines list to two different CSV files: "line_by_line.csv" and "all_lines.csv". It will then read the contents of both files and print them to the console.
+//        The output will look something like this:
+//
+//        Contents of line_by_line.csv:
+//    id,name,age
+//    1,John Doe,35
+//    2,Jane Doe,30
+//    3,Bob Smith,45
+//
+//    Contents of all_lines.csv:
+//    id,name,age
+//    1,John Doe,35
+//    2,Jane Doe,30
+//    3,Bob Smith,45
+//         */
+//    }
 }

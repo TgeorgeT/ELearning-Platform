@@ -26,7 +26,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> getAllFromMap() {
+    public List<Student> getAll() {
         return students.values().stream().collect(Collectors.toList());
     }
 

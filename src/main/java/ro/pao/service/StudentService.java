@@ -26,7 +26,7 @@ public interface StudentService {
 
     Optional<Student> getById(UUID id);
 
-    List<Student> getAllFromMap();
+    List<Student> getAll();
 
 
     void addOnlyOne(Student student);

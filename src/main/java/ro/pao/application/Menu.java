@@ -1,14 +1,23 @@
 package ro.pao.application;
 
+import ro.pao.application.csv.CsvWriter;
+import ro.pao.gateways.Requests;
 import ro.pao.model.*;
 import ro.pao.model.abstracts.User;
 import ro.pao.model.enums.CourseName;
+import ro.pao.repository.impl.TeacherRepositoryImpl;
 import ro.pao.service.*;
 import ro.pao.service.impl.*;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.*;
+
+import static ro.pao.application.utils.Constants.CSV_PATH_WRITE;
 
 /**
  * In Meniu se fac operatiile care pot lua informatii din toate dintre servicile definite.
@@ -20,64 +29,91 @@ public class Menu {
 
     private static Menu INSTANCE;
 
-    private final ExampleService exampleService = new ExampleServiceImpl();
-    private final ReportCardService reportCardService = new ReportCardServiceImpl();
-    private final CourseService courseService = new CourseServiceImpl();
-    private final StudentService studentService = new StudentServiceImpl();
-    private final QuestionService questionService = new QuestionServiceImpl();
-    private final TeacherService teacherService = new TeacherServiceImpl();
-    private final QuizService quizService = new QuizServiceImpl();
-    private final AnsweredQuizService answeredQuizService = new AnsweredQuizServiceImpl();
+    private static final Logger logger = Logger.getGlobal();
 
     public static Menu getInstance() {
-        return (INSTANCE == null ? new Menu() : INSTANCE);
+        if (INSTANCE == null) {
+            INSTANCE = new Menu();
+        }
+        return INSTANCE;
     }
 
     public void intro() {
         String intro = """
-                Welcome to the platform
+                Welcome to part 2;
                 """;
 
         System.out.println(intro);
 
-        ReportCard card1 = ReportCard.builder().grades(new HashMap<>()).build();
-        reportCardService.addOnlyOne(card1);
+    }
 
-        Teacher teacher1 = Teacher.builder().id(UUID.randomUUID()).name(new Name("Popescu", "Dan")).passwdHash(User.hashPasswd("1234")).build();
-        teacherService.addOnlyOne(teacher1);
+    public void makeRequest(){
+        Requests request = new Requests();
+        request.saveRequestInfo();
+    }
 
-        Course poo = Course.builder().id(UUID.randomUUID()).students(new HashSet<>()).quizes(new ArrayList<>()).year(Year.now()).name(CourseName.OOP).build();
+    public void writeTeachersToCSV() throws Exception {
+        TeacherService teacherService = new TeacherServiceImpl(new TeacherRepositoryImpl());
+        List<Teacher> teachers = teacherService.getAll();
+        System.out.println(teachers.size());
+        CsvWriter csvWriter = CsvWriter.getInstance();
+        Iterator<Teacher> it = teachers.iterator();
+        List<String[]> teacherStrings = new ArrayList<>();
+        Path path = Paths.get(CSV_PATH_WRITE);
+        while(it.hasNext()){
+            teacherStrings.add(it.next().toStringArray());
+        }
+        try {
+            csvWriter.writeLineByLine(teacherStrings, path);
+        }
+        catch(IOException e) {
+            logger.log(Level.SEVERE, "csv output error");
+        }
+    }
 
-        courseService.addOnlyOne(poo);
-
-        reportCardService.addGrade(card1.getId(), 4.3, poo);
-
-
-        Student student1 = Student.builder().id(UUID.randomUUID()).name(new Name("Teodorescu", "George")).userName("george")
-                .passwdHash(User.hashPasswd("12345")).reportCard(card1).build();
-        studentService.addOnlyOne(student1);
-
-        Student student2 = Student.builder().id(UUID.randomUUID()).name(new Name("Ionescu", "Andrei")).userName("andrei")
-                .passwdHash(User.hashPasswd("12345")).reportCard(card1).build();
-        studentService.addOnlyOne(student2);
-
-        System.out.println(reportCardService.getById(card1.getId()).get().getGrades().get(poo.getId()));
-
-        Question q1 = Question.builder().id(UUID.randomUUID()).text("q1").options(new ArrayList<>()).answer(1).points(5.0).build();
-
-        questionService.addOnlyOne(q1);
-        questionService.addOption(q1.getId(),"dasfds");
-        questionService.addOption(q1.getId(),"asdfds");
-        questionService.addOption(q1.getId(), "asd");
-
-        Question q2 = Question.builder().id(UUID.randomUUID()).text("q2").options(new ArrayList<>()).points(5.0).answer(2).build();
-
-        questionService.addOnlyOne(q2);
-        questionService.addOption(q2.getId(),"dasfds");
-        questionService.addOption(q2.getId(),"asdfds");
-        questionService.addOption(q2.getId(), "asd");
-
-
+    //   public void intro() {
+//        String intro = """
+//                Welcome to the platform
+//                """;
+//
+//        System.out.println(intro);
+//
+//        ReportCard card1 = ReportCard.builder().grades(new HashMap<>()).build();
+//        reportCardService.addOnlyOne(card1);
+//
+//        Teacher teacher1 = Teacher.builder().id(UUID.randomUUID()).name(new Name("Popescu", "Dan")).passwdHash(User.hashPasswd("1234")).build();
+//        teacherService.addOnlyOne(teacher1);
+//
+//        Course poo = Course.builder().id(UUID.randomUUID()).students(new HashSet<>()).quizes(new ArrayList<>()).year(Year.now()).name(CourseName.OOP).build();
+//
+//        courseService.addOnlyOne(poo);
+//
+//        reportCardService.addGrade(card1.getId(), 4.3, poo);
+//
+//
+//        Student student1 = Student.builder().id(UUID.randomUUID()).name(new Name("Teodorescu", "George")).userName("george")
+//                .passwdHash(User.hashPasswd("12345")).reportCard(card1).build();
+//        studentService.addOnlyOne(student1);
+//
+//        Student student2 = Student.builder().id(UUID.randomUUID()).name(new Name("Ionescu", "Andrei")).userName("andrei")
+//                .passwdHash(User.hashPasswd("12345")).reportCard(card1).build();
+//        studentService.addOnlyOne(student2);
+//
+//        System.out.println(reportCardService.getById(card1.getId()).get().getGrades().get(poo.getId()));
+//
+//        Question q1 = Question.builder().id(UUID.randomUUID()).text("q1").options(new ArrayList<>()).answer(1).points(5.0).build();
+//
+//        questionService.addOnlyOne(q1);
+//        questionService.addOption(q1.getId(),"dasfds");
+//        questionService.addOption(q1.getId(),"asdfds");
+//        questionService.addOption(q1.getId(), "asd");
+//
+//        Question q2 = Question.builder().id(UUID.randomUUID()).text("q2").options(new ArrayList<>()).points(5.0).answer(2).build();
+//
+//        questionService.addOnlyOne(q2);
+//        questionService.addOption(q2.getId(),"dasfds");
+//        questionService.addOption(q2.getId(),"asdfds");
+//        questionService.addOption(q2.getId(), "asd");
 
 
 //        ExampleClass exampleClass = ExampleClass.builder()
@@ -119,107 +155,107 @@ public class Menu {
 //        exampleService.removeElementById(exampleClass.getId());
 //        exampleService.getAllFromList()
 //                .forEach(elementFromList -> System.out.println(elementFromList));
-    }
-
-    public void getAllStudents() {
-        String intro = """
-                A list of students
-                """;
-
-        System.out.println(intro);
-
-        studentService.getAllFromMap().stream().sorted(Comparator.comparing(Student::getName)).forEach(student ->
-                System.out.println(student));
-    }
-
-    public void getAllCourses(){
-        String intro = """
-                 A list of courses
-                 """;
-
-        System.out.println(intro);
-
-        courseService.getAllFromMap().stream().forEach(c -> System.out.println(c));
-
-    }
-
-    public void addQuiz(){
-        String intro = """
-                Added a quiz
-                """;
-
-        System.out.println(intro);
-
-        Quiz quiz1 = Quiz.builder().id(UUID.randomUUID()).course(courseService.getAllFromMap().get(0)).questionList(new ArrayList<>()).build();
-        quizService.addOnlyOne(quiz1);
-
-        Quiz quiz2 = Quiz.builder().id(UUID.randomUUID()).course(courseService.getAllFromMap().get(0)).questionList(new ArrayList<>()).build();
-        quizService.addOnlyOne(quiz2);
-
-        Quiz quiz3 = Quiz.builder().id(UUID.randomUUID()).course(courseService.getAllFromMap().get(0)).questionList(new ArrayList<>()).build();
-        quizService.addOnlyOne(quiz3);
-
-        quizService.addQuestion(quiz1.getId(), questionService.getAllFromMap().get(0));
-        quizService.addQuestion(quiz1.getId(), questionService.getAllFromMap().get(1));
-
-        System.out.println(quizService.getAllFromMap().get(0));
-    }
-
-    public void gradeQuiz(){
-
-        String intro = """
-                Grading a quiz
-                """;
-        System.out.println(intro);
-
-        List<Integer> answers = new ArrayList<>();
-        answers.add(1);
-        answers.add(2);
-        AnsweredQuiz answeredQuiz = AnsweredQuiz.builder().id(UUID.randomUUID()).quiz(quizService.getAllFromMap().get(0)).answers(answers)
-                .student(studentService.getAllFromMap().get(0)).build();
-
-        answeredQuizService.addOnlyOne(answeredQuiz);
-
-        answeredQuizService.grade(answeredQuiz.getId());
-        System.out.println(answeredQuiz);
-        System.out.println(reportCardService.getAllFromMap().get(0));
-    }
 
 
-    public void getAllTeachers(){
-        String intro = """
-                Printing all teachers
-                """;
-        System.out.println(intro);
-        teacherService.getAllFromMap().stream().forEach(c -> System.out.println(c));
-    }
-
-    public void getAllQuizzes(){
-        String intro = """
-                Printing all quizzes
-                """;
-        System.out.println(intro);
-        quizService.getAllFromMap().stream().forEach(c -> System.out.println(c));
-    }
-
-    public void removeQuiz(){
-        String intro = """
-                Removing a quiz
-                """;
-        System.out.println(intro);
-        quizService.removeElementById(quizService.getAllFromMap().get(0).getId());
-        quizService.getAllFromMap().stream().forEach(c -> System.out.println(c));
-    }
-
-    public void orderedQuizzes(){
-        String intro = """
-                Ordering quizzes
-                """;
-        System.out.println(intro);
-        quizService.getAllFromMap().stream().sorted(Comparator.comparing(quiz -> quiz.getQuestionList().size())).forEach(quiz ->
-                System.out.println(quiz));
-
-    }
+//    public void getAllStudents() {
+//        String intro = """
+//                A list of students
+//                """;
+//
+//        System.out.println(intro);
+//
+//        studentService.getAllFromMap().stream().sorted(Comparator.comparing(Student::getName)).forEach(student ->
+//                System.out.println(student));
+//    }
+//
+//    public void getAllCourses(){
+//        String intro = """
+//                 A list of courses
+//                 """;
+//
+//        System.out.println(intro);
+//
+//        courseService.getAllFromMap().stream().forEach(c -> System.out.println(c));
+//
+//    }
+//
+//    public void addQuiz(){
+//        String intro = """
+//                Added a quiz
+//                """;
+//
+//        System.out.println(intro);
+//
+//        Quiz quiz1 = Quiz.builder().id(UUID.randomUUID()).course(courseService.getAllFromMap().get(0)).questionList(new ArrayList<>()).build();
+//        quizService.addOnlyOne(quiz1);
+//
+//        Quiz quiz2 = Quiz.builder().id(UUID.randomUUID()).course(courseService.getAllFromMap().get(0)).questionList(new ArrayList<>()).build();
+//        quizService.addOnlyOne(quiz2);
+//
+//        Quiz quiz3 = Quiz.builder().id(UUID.randomUUID()).course(courseService.getAllFromMap().get(0)).questionList(new ArrayList<>()).build();
+//        quizService.addOnlyOne(quiz3);
+//
+//        quizService.addQuestion(quiz1.getId(), questionService.getAllFromMap().get(0));
+//        quizService.addQuestion(quiz1.getId(), questionService.getAllFromMap().get(1));
+//
+//        System.out.println(quizService.getAllFromMap().get(0));
+//    }
+//
+//    public void gradeQuiz(){
+//
+//        String intro = """
+//                Grading a quiz
+//                """;
+//        System.out.println(intro);
+//
+//        List<Integer> answers = new ArrayList<>();
+//        answers.add(1);
+//        answers.add(2);
+//        AnsweredQuiz answeredQuiz = AnsweredQuiz.builder().id(UUID.randomUUID()).quiz(quizService.getAllFromMap().get(0)).answers(answers)
+//                .student(studentService.getAllFromMap().get(0)).build();
+//
+//        answeredQuizService.addOnlyOne(answeredQuiz);
+//
+//        answeredQuizService.grade(answeredQuiz.getId());
+//        System.out.println(answeredQuiz);
+//        System.out.println(reportCardService.getAllFromMap().get(0));
+//    }
+//
+//
+//    public void getAllTeachers(){
+//        String intro = """
+//                Printing all teachers
+//                """;
+//        System.out.println(intro);
+//        teacherService.getAllFromMap().stream().forEach(c -> System.out.println(c));
+//    }
+//
+//    public void getAllQuizzes(){
+//        String intro = """
+//                Printing all quizzes
+//                """;
+//        System.out.println(intro);
+//        quizService.getAllFromMap().stream().forEach(c -> System.out.println(c));
+//    }
+//
+//    public void removeQuiz(){
+//        String intro = """
+//                Removing a quiz
+//                """;
+//        System.out.println(intro);
+//        quizService.removeElementById(quizService.getAllFromMap().get(0).getId());
+//        quizService.getAllFromMap().stream().forEach(c -> System.out.println(c));
+//    }
+//
+//    public void orderedQuizzes(){
+//        String intro = """
+//                Ordering quizzes
+//                """;
+//        System.out.println(intro);
+//        quizService.getAllFromMap().stream().sorted(Comparator.comparing(quiz -> quiz.getQuestionList().size())).forEach(quiz ->
+//                System.out.println(quiz));
+//
+//    }
 
 
 }

@@ -20,6 +20,6 @@ public interface AnsweredQuizService {
 
     void modifyElementById(UUID id, AnsweredQuiz aQuiz);
 
-    void grade(UUID id);
+ //   void grade(UUID id);
 
 }

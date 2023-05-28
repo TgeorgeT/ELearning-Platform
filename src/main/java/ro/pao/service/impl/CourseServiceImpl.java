@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Getter
 public class CourseServiceImpl implements CourseService {
-    static private Map<UUID, Course> courses = new HashMap<>();
+    private static Map<UUID, Course> courses = new HashMap<>();
 
     @Override
     public Optional<Course> getById(UUID id) {
