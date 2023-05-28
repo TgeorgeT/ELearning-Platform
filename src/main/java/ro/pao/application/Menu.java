@@ -61,6 +61,8 @@ public class Menu {
         Iterator<Teacher> it = teachers.iterator();
         List<String[]> teacherStrings = new ArrayList<>();
         Path path = Paths.get(CSV_PATH_WRITE);
+        String[] headers = {"user_id", "last_name", "first_name"};
+        teacherStrings.add(headers);
         while(it.hasNext()){
             teacherStrings.add(it.next().toStringArray());
         }
