@@ -9,6 +9,7 @@ Question
 AnsweredQuiz
 Course
 ReportCard
+Enrolled
 
 
 ### Abstract classes:
