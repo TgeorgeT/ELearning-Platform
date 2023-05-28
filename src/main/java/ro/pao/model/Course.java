@@ -17,10 +17,7 @@ import java.util.*;
 @SuperBuilder
 public class Course extends AbstractEntity {
     private CourseName name;
-    private Set<UUID> students = new HashSet<>();
-    private Teacher teacher;
+    private UUID teacher_id;
     private Year year;
-    private List<Quiz>quizes = new ArrayList<>();
-    
 
 }

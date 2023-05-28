@@ -4,8 +4,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import ro.pao.model.abstracts.AbstractEntity;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -14,8 +12,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @NoArgsConstructor
 @SuperBuilder
-public class Quiz extends AbstractEntity {
-    private List<Question> questionList = new ArrayList<>();
-    private UUID course_id;
-
+public class Enrolled extends AbstractEntity {
+    UUID student_id;
+    UUID course_id;
 }

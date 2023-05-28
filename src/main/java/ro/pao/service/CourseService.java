@@ -24,14 +24,12 @@ public interface CourseService {
 
      Optional<Course> getById(UUID id);
 
-    List<Course> getAllFromMap();
-
-    List<Course> getAllByName(CourseName name);
+    List<Course> getAll();
 
     void addOnlyOne(Course course);
     void addAllFromGivenList(List<Course> courses);
 
     void removeElementById(UUID id);
 
-    void modifyElementById(UUID id, Course newCourse);
+
 }

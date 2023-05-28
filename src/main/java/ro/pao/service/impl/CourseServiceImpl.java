@@ -1,54 +1,54 @@
 package ro.pao.service.impl;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+//import ro.pao.application.csv.CsvReader;
+//import ro.pao.application.csv.CsvWriter;
 import ro.pao.model.Course;
-import ro.pao.model.enums.CourseName;
+import ro.pao.model.Student;
+import ro.pao.model.Teacher;
+import ro.pao.repository.CourseRepository;
+import ro.pao.repository.StudentRepository;
+import ro.pao.repository.TeacherRepository;
 import ro.pao.service.CourseService;
+import ro.pao.service.StudentService;
+import ro.pao.service.TeacherService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-@NoArgsConstructor
+/**
+ * Aici implementam metodele din interfata serviciului definit.
+ */
+@RequiredArgsConstructor
 @Getter
 public class CourseServiceImpl implements CourseService {
-    private static Map<UUID, Course> courses = new HashMap<>();
+
+    private final CourseRepository courseRepository;
 
     @Override
     public Optional<Course> getById(UUID id) {
-        if (courses.containsKey(id)) {
-            return Optional.of(courses.get(id));
-        }
-        return Optional.ofNullable(null);
+        return courseRepository.getObjectById(id);
+    }
+
+
+    @Override
+    public List<Course > getAll() {
+        return courseRepository.getAll();
     }
 
     @Override
-    public List<Course> getAllFromMap() {
-        return courses.values().stream().collect(Collectors.toList());
+    public void addAllFromGivenList(List<Course> courseList) {
+        courseRepository.addAllFromGivenList(courseList);
     }
 
     @Override
     public void addOnlyOne(Course course) {
-        courses.put(course.getId(), course);
+        courseRepository.addNewObject(course);
     }
 
     @Override
-    public void addAllFromGivenList(List<Course> courses) {
-        courses.stream().forEach(c -> this.courses.put(c.getId(), c));
-    }
-    @Override
-    public void removeElementById(UUID id){
-        courses.remove(id);
+    public void removeElementById(UUID id) {
+        courseRepository.deleteObjectById(id);
     }
 
-    @Override
-    public void modifyElementById(UUID id, Course newCourse) {
-        removeElementById(id);
-        addOnlyOne(newCourse);
-    }
-
-    @Override
-    public List<Course> getAllByName(CourseName name) {
-        return courses.values().stream().filter(c -> c.getName().equals(name)).collect(Collectors.toList());
-    }
 }
