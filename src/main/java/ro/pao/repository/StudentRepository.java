@@ -1,6 +1,7 @@
 package ro.pao.repository;
 
 import ro.pao.model.ExampleClass;
+import ro.pao.model.Student;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,15 +9,14 @@ import java.util.UUID;
 
 public interface StudentRepository {
 
-    Optional<ExampleClass> getObjectById(UUID id);
+    Optional<Student> getObjectById(UUID id);
 
     void deleteObjectById(UUID id);
 
-    void updateObjectById(UUID id, ExampleClass newObject);
 
-    void addNewObject(ExampleClass exampleClass);
+    void addNewObject(Student student);
 
-    List<ExampleClass> getAll();
+    List<Student> getAll();
 
-    void addAllFromGivenList(List<ExampleClass> exampleClassList);
+    void addAllFromGivenList(List<Student> studentList);
 }

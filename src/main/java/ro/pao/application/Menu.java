@@ -5,6 +5,8 @@ import ro.pao.gateways.Requests;
 import ro.pao.model.*;
 import ro.pao.model.abstracts.User;
 import ro.pao.model.enums.CourseName;
+import ro.pao.repository.StudentRepository;
+import ro.pao.repository.impl.StudentRepositoryImpl;
 import ro.pao.repository.impl.TeacherRepositoryImpl;
 import ro.pao.service.*;
 import ro.pao.service.impl.*;
@@ -40,7 +42,7 @@ public class Menu {
 
     public void intro() {
         String intro = """
-                Welcome to part 2;
+                Welcome to part 2
                 """;
 
         System.out.println(intro);
@@ -55,7 +57,6 @@ public class Menu {
     public void writeTeachersToCSV() throws Exception {
         TeacherService teacherService = new TeacherServiceImpl(new TeacherRepositoryImpl());
         List<Teacher> teachers = teacherService.getAll();
-        System.out.println(teachers.size());
         CsvWriter csvWriter = CsvWriter.getInstance();
         Iterator<Teacher> it = teachers.iterator();
         List<String[]> teacherStrings = new ArrayList<>();
@@ -69,6 +70,16 @@ public class Menu {
         catch(IOException e) {
             logger.log(Level.SEVERE, "csv output error");
         }
+    }
+
+    public void writeParallel(){
+        StudentService studentService = new StudentServiceImpl(new StudentRepositoryImpl());
+        List<Student> students = studentService.getAll();
+        System.out.println("This is a list of all the students:");
+        students.parallelStream().forEach(student -> {
+            System.out.println(student.getName().toString());
+        });
+
     }
 
     //   public void intro() {

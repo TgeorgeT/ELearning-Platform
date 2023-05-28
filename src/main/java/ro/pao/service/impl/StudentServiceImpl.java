@@ -1,58 +1,51 @@
 package ro.pao.service.impl;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import ro.pao.model.Course;
-import ro.pao.model.Name;
+import lombok.RequiredArgsConstructor;
+//import ro.pao.application.csv.CsvReader;
+//import ro.pao.application.csv.CsvWriter;
 import ro.pao.model.Student;
-import ro.pao.model.enums.CourseName;
-import ro.pao.service.CourseService;
+import ro.pao.model.Teacher;
+import ro.pao.repository.StudentRepository;
+import ro.pao.repository.TeacherRepository;
 import ro.pao.service.StudentService;
+import ro.pao.service.TeacherService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-@NoArgsConstructor
+/**
+ * Aici implementam metodele din interfata serviciului definit.
+ */
+@RequiredArgsConstructor
 @Getter
 public class StudentServiceImpl implements StudentService {
-    static private Map<UUID, Student> students = new HashMap<>();
+
+    private final StudentRepository studentRepository;
 
     @Override
     public Optional<Student> getById(UUID id) {
-        if (students.containsKey(id)) {
-            return Optional.of(students.get(id));
-        }
-        return Optional.ofNullable(null);
+        return studentRepository.getObjectById(id);
+    }
+
+
+    @Override
+    public List<Student > getAll() {
+        return studentRepository.getAll();
     }
 
     @Override
-    public List<Student> getAll() {
-        return students.values().stream().collect(Collectors.toList());
+    public void addAllFromGivenList(List<Student> teacherList) {
+        studentRepository.addAllFromGivenList(teacherList);
     }
 
     @Override
     public void addOnlyOne(Student student) {
-        students.put(student.getId(), student);
-    }
-
-    @Override
-    public void addAllFromGivenList(List<Student> students) {
-        students.stream().forEach(c -> this.students.put(c.getId(), c));
+        studentRepository.addNewObject(student);
     }
 
     @Override
     public void removeElementById(UUID id) {
-        students.remove(id);
+        studentRepository.deleteObjectById(id);
     }
 
-    @Override
-    public void modifyElementById(UUID id, Student student) {
-        removeElementById(id);
-        addOnlyOne(student);
-    }
-
-    @Override
-    public List<Student> getAllByName(Name name) {
-        return students.values().stream().filter(c -> c.getName().equals(name)).collect(Collectors.toList());
-    }
 }

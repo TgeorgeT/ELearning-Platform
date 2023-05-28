@@ -34,7 +34,5 @@ public interface StudentService {
 
     void removeElementById(UUID id);
 
-    void modifyElementById(UUID id, Student student);
 
-    List<Student> getAllByName(Name name);
 }

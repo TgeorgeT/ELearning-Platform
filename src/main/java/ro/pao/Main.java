@@ -22,8 +22,8 @@ public class Main {
 
             menu.intro();
             //menu.makeRequest();
-
             menu.writeTeachersToCSV();
+            menu.writeParallel();
             if ("exit".equals(scanner.next())) {
                 break;
             }

@@ -5,4 +5,8 @@ public record Name(String lastName, String firstName)  implements Comparable<Nam
     public int compareTo(Name name) {
         return (this.lastName+this.firstName).compareTo(name.lastName+name.firstName);
     }
+
+    public String toString(){
+        return lastName+" "+firstName;
+    }
 }

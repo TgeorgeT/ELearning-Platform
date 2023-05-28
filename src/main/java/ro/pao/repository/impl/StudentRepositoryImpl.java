@@ -2,7 +2,9 @@ package ro.pao.repository.impl;
 
 import ro.pao.config.DatabaseConfiguration;
 import ro.pao.mapper.ExampleClassMapper;
+import ro.pao.mapper.StudentMapper;
 import ro.pao.model.ExampleClass;
+import ro.pao.model.Student;
 import ro.pao.repository.StudentRepository;
 
 import java.sql.Connection;
@@ -15,19 +17,19 @@ import java.util.UUID;
 
 public class StudentRepositoryImpl implements StudentRepository {
 
-    private static final ExampleClassMapper exampleClassMapper = ExampleClassMapper.getInstance();
+    private static final StudentMapper studentMapper = StudentMapper.getInstance();
 
 
     @Override
-    public Optional<ExampleClass> getObjectById(UUID id) {
-        String selectSql = "SELECT * FROM example_table WHERE id=?";
+    public Optional<Student> getObjectById(UUID id) {
+        String selectSql = "SELECT * FROM student WHERE id=?";
 
         try (Connection connection = DatabaseConfiguration.getDatabaseConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectSql)) {
             preparedStatement.setString(1, id.toString());
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            return exampleClassMapper.mapToExampleClass(resultSet);
+            return studentMapper.mapToStudent(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -37,7 +39,7 @@ public class StudentRepositoryImpl implements StudentRepository {
 
     @Override
     public void deleteObjectById(UUID id) {
-        String updateNameSql = "DELETE FROM example_table WHERE id=?";
+        String updateNameSql = "DELETE FROM student WHERE id=?";
 
         try (Connection connection = DatabaseConfiguration.getDatabaseConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(updateNameSql)) {
@@ -49,29 +51,19 @@ public class StudentRepositoryImpl implements StudentRepository {
         }
     }
 
-    @Override
-    public void updateObjectById(UUID id, ExampleClass newObject) {
-        String updateNameSql = "UPDATE example_table SET name=? WHERE id=?";
 
-        try (Connection connection = DatabaseConfiguration.getDatabaseConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(updateNameSql)) {
-            preparedStatement.setString(1, newObject.getExampleStringField());
-            preparedStatement.setString(2, id.toString());
-
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
-    public void addNewObject(ExampleClass exampleClass) {
-        String insertSql = "INSERT INTO example_table (id, name) VALUES (?, ?)";
+    public void addNewObject(Student student) {
+        String insertSql = "INSERT INTO student (id, first_name, last_name, user_name, password_hash) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection connection = DatabaseConfiguration.getDatabaseConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(insertSql)) {
-            preparedStatement.setString(1, exampleClass.getId().toString());
-            preparedStatement.setString(2, exampleClass.getExampleStringField());
+            preparedStatement.setString(1, student.getId().toString());
+            preparedStatement.setString(2, student.getName().firstName());
+            preparedStatement.setString(3, student.getName().lastName());
+            preparedStatement.setString(4, student.getUserName());
+            preparedStatement.setString(5, student.getPasswdHash());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -80,14 +72,14 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public List<ExampleClass> getAll() {
-        String selectSql = "SELECT * FROM example_table";
+    public List<Student> getAll() {
+        String selectSql = "SELECT * FROM student";
 
         try (Connection connection = DatabaseConfiguration.getDatabaseConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(selectSql)) {
 
             ResultSet resultSet = preparedStatement.executeQuery();
-            return exampleClassMapper.mapToExampleClassList(resultSet);
+            return studentMapper.mapToStudentList(resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -96,7 +88,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public void addAllFromGivenList(List<ExampleClass> exampleClassList) {
-        exampleClassList.forEach(this::addNewObject);
+    public void addAllFromGivenList(List<Student> studentList) {
+        studentList.forEach(this::addNewObject);
     }
 }
